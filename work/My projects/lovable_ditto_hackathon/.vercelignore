@@ -4,4 +4,5 @@ src
 tsconfig.json
 test-*.js
 test-*.html
-frontend
+frontend/
+frontend/ditto-hackathon/

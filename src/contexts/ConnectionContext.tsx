@@ -48,6 +48,10 @@ export const validatedEvents = new EventEmitter();
 
 interface ConnectionProviderProps {
   children: ReactNode;
+  avatarRegistry?: {
+    addOrUpdateUser: (userId: string, displayName: string) => void;
+    updateUserActivity: (userId: string) => void;
+  };
 }
 
 export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
@@ -92,6 +96,14 @@ export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
     
     if (validation.isValid && validation.validatedPayload) {
       processedEvent = createValidEvent(validation.validatedPayload);
+      
+      // Notify avatar registry via window event (decoupled approach)
+      window.dispatchEvent(new CustomEvent('avatar-registry-update', {
+        detail: {
+          userId: validation.validatedPayload.userId,
+          displayName: validation.validatedPayload.displayName
+        }
+      }));
     } else {
       processedEvent = createErrorEvent(validation.errors, data);
     }

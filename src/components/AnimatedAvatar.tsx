@@ -1,6 +1,8 @@
 import { cn } from "@/lib/utils";
 import { useAnimationQueue, AnimationEffect } from '@/hooks/useAnimationQueue';
+import { useMediaOverlays } from '@/hooks/useMediaOverlays';
 import { TearBubble, ZzzBubble, BoomPopover, ConfettiBurst } from './animations/AnimationEffects';
+import { MediaOverlay } from './animations/MediaOverlay';
 import { useConnectionEvents } from '@/hooks/useConnectionEvents';
 import { useEffect } from 'react';
 
@@ -49,11 +51,17 @@ const getAnimationClass = (animation: AnimationEffect | null) => {
 
 export function AnimatedAvatar({ userId, name, initials, colorIndex, status = 'offline', className }: AnimatedAvatarProps) {
   const { currentAnimation, queueAnimation, completeAnimation } = useAnimationQueue(1000);
+  const { overlays, addOverlay, removeOverlay } = useMediaOverlays(2);
   
   // Listen for connection events and trigger animations
   useConnectionEvents((event) => {
     if (event.userId === userId && event.type === 'event') {
       const action = event.action.toLowerCase();
+      
+      // Handle media URL if present
+      if (event.mediaUrl) {
+        addOverlay(event.mediaUrl);
+      }
       
       // Map action keywords to animation types
       if (['cry', 'crying', 'sad', 'tear'].includes(action)) {
@@ -74,6 +82,15 @@ export function AnimatedAvatar({ userId, name, initials, colorIndex, status = 'o
 
   return (
     <div className={cn("flex flex-col items-center group cursor-pointer relative", className)}>
+      {/* Media Overlays */}
+      {overlays.map((overlay) => (
+        <MediaOverlay
+          key={overlay.id}
+          overlay={overlay}
+          onDismiss={removeOverlay}
+        />
+      ))}
+      
       {/* Animation Effects */}
       <TearBubble 
         show={currentAnimation?.type === 'cry'} 

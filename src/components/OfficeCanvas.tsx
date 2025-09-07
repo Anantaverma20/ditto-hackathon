@@ -44,7 +44,7 @@ export function OfficeCanvas() {
               Avatars are automatically positioned based on user ID for consistent placement
             </p>
             <p className="text-xs text-muted-foreground">
-              Actions like "cry", "dance", "rage", "sleep", and "party" trigger special animations
+              Actions like "cry", "dance", "rage", "sleep", and "party" trigger special animations • Media URLs show floating overlays
             </p>
           </div>
         )}

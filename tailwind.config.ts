@@ -57,6 +57,36 @@ export default {
           border: "hsl(var(--sidebar-border))",
           ring: "hsl(var(--sidebar-ring))",
         },
+        // Office Chaos specific colors
+        office: {
+          canvas: "hsl(var(--office-canvas))",
+        },
+        avatar: {
+          1: "hsl(var(--avatar-bg-1))",
+          2: "hsl(var(--avatar-bg-2))",
+          3: "hsl(var(--avatar-bg-3))",
+          4: "hsl(var(--avatar-bg-4))",
+          5: "hsl(var(--avatar-bg-5))",
+          6: "hsl(var(--avatar-bg-6))",
+        },
+        event: {
+          positive: "hsl(var(--event-positive))",
+          neutral: "hsl(var(--event-neutral))",
+          warning: "hsl(var(--event-warning))",
+        },
+      },
+      backgroundImage: {
+        "gradient-canvas": "var(--gradient-canvas)",
+        "gradient-avatar": "var(--gradient-avatar)",
+      },
+      boxShadow: {
+        avatar: "var(--shadow-avatar)",
+        card: "var(--shadow-card)",
+        panel: "var(--shadow-panel)",
+      },
+      transitionTimingFunction: {
+        smooth: "var(--transition-smooth)",
+        bounce: "var(--transition-bounce)",
       },
       borderRadius: {
         lg: "var(--radius)",

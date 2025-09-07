@@ -1,0 +1,7 @@
+node_modules
+.env
+src
+tsconfig.json
+test-*.js
+test-*.html
+frontend

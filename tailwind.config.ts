@@ -93,7 +93,7 @@ export default {
         md: "calc(var(--radius) - 2px)",
         sm: "calc(var(--radius) - 4px)",
       },
-      keyframes: {
+        keyframes: {
         "accordion-down": {
           from: {
             height: "0",
@@ -110,10 +110,78 @@ export default {
             height: "0",
           },
         },
+        // Animation effects for avatars
+        "shake": {
+          "0%, 100%": { transform: "translateX(0)" },
+          "25%": { transform: "translateX(-2px)" },
+          "75%": { transform: "translateX(2px)" }
+        },
+        "dance-rotate": {
+          "0%": { transform: "rotate(0deg) scale(1)" },
+          "25%": { transform: "rotate(90deg) scale(1.05)" },
+          "50%": { transform: "rotate(180deg) scale(1)" },
+          "75%": { transform: "rotate(270deg) scale(1.05)" },
+          "100%": { transform: "rotate(360deg) scale(1)" }
+        },
+        "screen-shake": {
+          "0%, 100%": { transform: "translate(0)" },
+          "10%": { transform: "translate(-2px, -1px)" },
+          "20%": { transform: "translate(2px, 1px)" },
+          "30%": { transform: "translate(-1px, 2px)" },
+          "40%": { transform: "translate(1px, -2px)" },
+          "50%": { transform: "translate(-2px, 1px)" },
+          "60%": { transform: "translate(2px, -1px)" },
+          "70%": { transform: "translate(-1px, -2px)" },
+          "80%": { transform: "translate(1px, 2px)" },
+          "90%": { transform: "translate(-2px, -1px)" }
+        },
+        "bounce-party": {
+          "0%, 20%, 50%, 80%, 100%": { transform: "translateY(0) scale(1)" },
+          "40%": { transform: "translateY(-10px) scale(1.05)" },
+          "60%": { transform: "translateY(-5px) scale(1.02)" }
+        },
+        "confetti-burst": {
+          "0%": { 
+            transform: "translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(0) scale(1)",
+            opacity: "1"
+          },
+          "100%": { 
+            transform: "translate(-50%, -50%) rotate(var(--rotation, 0deg)) translateY(-60px) scale(0.5)",
+            opacity: "0"
+          }
+        },
+        "fade-in": {
+          "0%": {
+            opacity: "0",
+            transform: "translateY(10px)"
+          },
+          "100%": {
+            opacity: "1",
+            transform: "translateY(0)"
+          }
+        },
+        "scale-in": {
+          "0%": {
+            transform: "scale(0.95)",
+            opacity: "0"
+          },
+          "100%": {
+            transform: "scale(1)",
+            opacity: "1"
+          }
+        }
       },
       animation: {
         "accordion-down": "accordion-down 0.2s ease-out",
         "accordion-up": "accordion-up 0.2s ease-out",
+        // Avatar animation effects
+        "shake": "shake 0.5s ease-in-out 3",
+        "dance-rotate": "dance-rotate 2s ease-in-out",
+        "screen-shake": "screen-shake 0.5s ease-in-out 2",
+        "bounce-party": "bounce-party 1s ease-in-out",
+        "confetti-burst": "confetti-burst 1.5s ease-out forwards",
+        "fade-in": "fade-in 0.3s ease-out",
+        "scale-in": "scale-in 0.2s ease-out"
       },
     },
   },

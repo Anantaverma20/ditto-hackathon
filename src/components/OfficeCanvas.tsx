@@ -1,4 +1,4 @@
-import { Avatar } from './Avatar';
+import { AnimatedAvatar } from './AnimatedAvatar';
 import { mockUsers } from '@/data/mockData';
 import { useAvatarRegistry } from '@/contexts/AvatarRegistry';
 import { useConnection } from '@/contexts/ConnectionContext';
@@ -26,8 +26,9 @@ export function OfficeCanvas() {
         
         <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 xl:grid-cols-8 gap-6 auto-rows-max">
           {displayUsers.map((user) => (
-            <Avatar
+            <AnimatedAvatar
               key={user.id}
+              userId={user.id}
               name={users.length > 0 ? user.displayName : user.name}
               initials={user.initials}
               colorIndex={user.colorIndex}
@@ -39,8 +40,11 @@ export function OfficeCanvas() {
         
         {isLive && (
           <div className="mt-8 text-center">
-            <p className="text-sm text-muted-foreground">
+            <p className="text-sm text-muted-foreground mb-2">
               Avatars are automatically positioned based on user ID for consistent placement
+            </p>
+            <p className="text-xs text-muted-foreground">
+              Actions like "cry", "dance", "rage", "sleep", and "party" trigger special animations
             </p>
           </div>
         )}

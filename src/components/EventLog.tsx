@@ -127,8 +127,8 @@ export function EventLog() {
   };
 
   return (
-    <div className="w-96 bg-card border-l border-border flex flex-col shadow-panel">
-      <div className="p-4 border-b border-border bg-card">
+    <div className="w-96 bg-gradient-card border-l border-border/50 flex flex-col shadow-panel backdrop-blur-sm">
+      <div className="p-4 border-b border-border/50 bg-gradient-card backdrop-blur-sm">
         <div className="mb-3">
           <h2 className="text-xl font-semibold text-foreground mb-1">
             Live Event Log

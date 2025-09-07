@@ -13,6 +13,9 @@ export default {
       },
     },
     extend: {
+      fontFamily: {
+        sans: ['Inter', 'system-ui', 'sans-serif'],
+      },
       colors: {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
@@ -74,15 +77,23 @@ export default {
           neutral: "hsl(var(--event-neutral))",
           warning: "hsl(var(--event-warning))",
         },
+        chaos: {
+          low: "hsl(var(--chaos-low))",
+          medium: "hsl(var(--chaos-medium))",
+          high: "hsl(var(--chaos-high))",
+          critical: "hsl(var(--chaos-critical))",
+        },
       },
       backgroundImage: {
         "gradient-canvas": "var(--gradient-canvas)",
         "gradient-avatar": "var(--gradient-avatar)",
+        "gradient-card": "var(--gradient-card)",
       },
       boxShadow: {
         avatar: "var(--shadow-avatar)",
         card: "var(--shadow-card)",
         panel: "var(--shadow-panel)",
+        button: "var(--shadow-button)",
       },
       transitionTimingFunction: {
         smooth: "var(--transition-smooth)",

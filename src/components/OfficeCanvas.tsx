@@ -24,7 +24,7 @@ export function OfficeCanvas() {
   const isLive = users.length > 0 && status === 'live';
 
   return (
-    <div className="flex-1 bg-gradient-canvas p-8" style={{ minHeight: 'calc(100vh - 60px)' }}>
+    <div className="flex-1 bg-gradient-canvas p-8" style={{ minHeight: 'calc(100vh - 120px)' }}>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
           <p className="text-muted-foreground text-lg">

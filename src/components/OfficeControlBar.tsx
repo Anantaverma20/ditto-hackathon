@@ -1,6 +1,7 @@
 import { RotateCcw, EyeOff, Accessibility, Building2, Eye, Zap } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Badge } from '@/components/ui/badge';
+import { ChaosMeter } from '@/components/ChaosMeter';
 import { 
   Select, 
   SelectContent, 
@@ -40,7 +41,7 @@ export function OfficeControlBar() {
   };
 
   return (
-    <div className="bg-card border-b border-border px-4 py-3 shadow-sm">
+    <div className="bg-gradient-card border-b border-border/50 px-4 py-3 shadow-card backdrop-blur-sm">
       <div className="max-w-7xl mx-auto flex items-center justify-between">
         <div className="flex items-center gap-4">
           {/* Office Chaos Title */}
@@ -70,6 +71,9 @@ export function OfficeControlBar() {
           )}
         </div>
 
+        {/* Center - Chaos Meter */}
+        <ChaosMeter />
+
         {/* Controls */}
         <div className="flex items-center gap-2">
           <TooltipProvider>
@@ -81,7 +85,7 @@ export function OfficeControlBar() {
                   size="sm"
                   onClick={toggleMuteMemes}
                   className={cn(
-                    "h-8 px-3",
+                    "h-8 px-3 shadow-button",
                     muteMemes && "bg-muted text-muted-foreground"
                   )}
                 >
@@ -104,7 +108,7 @@ export function OfficeControlBar() {
                   size="sm"
                   onClick={toggleReduceMotion}
                   className={cn(
-                    "h-8 px-3",
+                    "h-8 px-3 shadow-button",
                     reduceMotion && "bg-accent/20 text-accent-foreground"
                   )}
                 >
@@ -126,7 +130,7 @@ export function OfficeControlBar() {
                   variant="outline"
                   size="sm"
                   onClick={handleReset}
-                  className="h-8 px-3 text-destructive hover:text-destructive"
+                  className="h-8 px-3 text-destructive hover:text-destructive shadow-button"
                 >
                   <RotateCcw className="w-4 h-4 mr-1" />
                   <span className="text-xs">Reset</span>
@@ -139,7 +143,7 @@ export function OfficeControlBar() {
           </TooltipProvider>
 
           {/* Status Indicator */}
-          <div className="flex items-center gap-2 ml-2 px-2 py-1 bg-muted/30 rounded-md">
+          <div className="flex items-center gap-2 ml-2 px-2 py-1 bg-muted/30 rounded-md shadow-sm">
             <div className={cn(
               "w-2 h-2 rounded-full",
               isLive ? 'bg-event-positive animate-pulse' : 'bg-muted-foreground'

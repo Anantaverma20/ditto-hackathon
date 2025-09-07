@@ -1,8 +1,15 @@
+# Frontend files - exclude from backend deployment
+frontend/
+frontend/ditto-hackathon/
+frontend/ditto-hackathon/**
+
+# Development files
 node_modules
 .env
 src
 tsconfig.json
 test-*.js
 test-*.html
-frontend/
-frontend/ditto-hackathon/
+
+# Build artifacts (keep dist/ for deployment)
+build/

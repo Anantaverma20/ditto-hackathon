@@ -8,11 +8,25 @@ export interface User {
 
 export interface Event {
   id: string;
+  userId: string;
   displayName: string;
-  action: 'joined' | 'left' | 'message' | 'break' | 'meeting';
+  action: string;
+  messageText: string;
   preview: string;
   relativeTime: string;
   timestamp: number;
+  mediaUrl?: string;
+  type?: 'event' | 'error';
+  errorMessage?: string;
+}
+
+export interface IncomingEventPayload {
+  userId: string;
+  displayName: string;
+  action: string;
+  messageText: string;
+  mediaUrl?: string;
+  timestamp?: number;
 }
 
 export const mockUsers: User[] = [
@@ -41,80 +55,100 @@ export const mockUsers: User[] = [
 export const mockEvents: Event[] = [
   {
     id: '1',
+    userId: '1',
     displayName: 'Alex Chen',
     action: 'joined',
+    messageText: 'Started working on the quarterly report dashboard',
     preview: 'Started working on the quarterly report dashboard',
     relativeTime: '2 minutes ago',
     timestamp: Date.now() - 120000,
   },
   {
     id: '2',
+    userId: '2',
     displayName: 'Sarah Wilson',
     action: 'message',
+    messageText: 'Hey team, the client meeting has been moved to 3 PM today. Please update your calendars!',
     preview: 'Hey team, the client meeting has been moved to 3 PM today. Please update your calendars!',
     relativeTime: '5 minutes ago',
     timestamp: Date.now() - 300000,
   },
   {
     id: '3',
+    userId: '3',
     displayName: 'Mike Rodriguez',
     action: 'break',
+    messageText: 'Taking a coffee break after finishing the API integration',
     preview: 'Taking a coffee break after finishing the API integration',
     relativeTime: '8 minutes ago',
     timestamp: Date.now() - 480000,
   },
   {
     id: '4',
+    userId: '4',
     displayName: 'Emma Thompson',
     action: 'meeting',
+    messageText: 'Started standup meeting with the design team',
     preview: 'Started standup meeting with the design team',
     relativeTime: '12 minutes ago',
     timestamp: Date.now() - 720000,
   },
   {
     id: '5',
+    userId: '5',
     displayName: 'David Park',
     action: 'message',
+    messageText: 'Just pushed the latest changes to the main branch. Ready for review!',
     preview: 'Just pushed the latest changes to the main branch. Ready for review!',
     relativeTime: '15 minutes ago',
     timestamp: Date.now() - 900000,
   },
   {
     id: '6',
+    userId: '6',
     displayName: 'Lisa Johnson',
     action: 'joined',
+    messageText: 'Back from vacation and ready to tackle the new project requirements',
     preview: 'Back from vacation and ready to tackle the new project requirements',
     relativeTime: '18 minutes ago',
     timestamp: Date.now() - 1080000,
   },
   {
     id: '7',
+    userId: '7',
     displayName: 'Chris Miller',
     action: 'left',
+    messageText: 'Heading out for lunch after completing the user testing session',
     preview: 'Heading out for lunch after completing the user testing session',
     relativeTime: '25 minutes ago',
     timestamp: Date.now() - 1500000,
   },
   {
     id: '8',
+    userId: '8',
     displayName: 'Anna Davis',
     action: 'message',
+    messageText: 'The mockups for the mobile app are ready for feedback. Check them out in Figma!',
     preview: 'The mockups for the mobile app are ready for feedback. Check them out in Figma!',
     relativeTime: '32 minutes ago',
     timestamp: Date.now() - 1920000,
   },
   {
     id: '9',
+    userId: '9',
     displayName: 'Tom Anderson',
     action: 'meeting',
+    messageText: 'Wrapping up client presentation - great feedback received!',
     preview: 'Wrapping up client presentation - great feedback received!',
     relativeTime: '45 minutes ago',
     timestamp: Date.now() - 2700000,
   },
   {
     id: '10',
+    userId: '10',
     displayName: 'Rachel Green',
     action: 'break',
+    messageText: 'Quick team building activity in the break room',
     preview: 'Quick team building activity in the break room',
     relativeTime: '1 hour ago',
     timestamp: Date.now() - 3600000,

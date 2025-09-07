@@ -1,9 +1,10 @@
 import { useEffect } from 'react';
-import { connectionEvents, ConnectionMessage } from '@/contexts/ConnectionContext';
+import { validatedEvents } from '@/contexts/ConnectionContext';
+import { Event } from '@/data/mockData';
 
-export const useConnectionEvents = (callback: (message: ConnectionMessage) => void) => {
+export const useConnectionEvents = (callback: (event: Event) => void) => {
   useEffect(() => {
-    const unsubscribe = connectionEvents.subscribe(callback);
+    const unsubscribe = validatedEvents.subscribe(callback);
     return unsubscribe;
   }, [callback]);
 };

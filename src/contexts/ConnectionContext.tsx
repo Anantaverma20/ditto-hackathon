@@ -1,4 +1,6 @@
 import { createContext, useContext, useEffect, useState, ReactNode, useRef } from 'react';
+import { Event } from '@/data/mockData';
+import { validateEventPayload, createValidEvent, createErrorEvent } from '@/utils/eventValidation';
 
 export type ConnectionStatus = 'connecting' | 'live' | 'reconnecting' | 'offline';
 
@@ -11,6 +13,7 @@ export interface ConnectionMessage {
 interface ConnectionContextType {
   status: ConnectionStatus;
   lastMessage: ConnectionMessage | null;
+  events: Event[];
   connect: () => void;
   disconnect: () => void;
 }
@@ -25,23 +28,23 @@ export const useConnection = () => {
   return context;
 };
 
-// Event emitter for connection messages
-class ConnectionEventEmitter {
-  private listeners: ((message: ConnectionMessage) => void)[] = [];
+// Event emitter for validated events
+class EventEmitter {
+  private listeners: ((event: Event) => void)[] = [];
 
-  subscribe(callback: (message: ConnectionMessage) => void) {
+  subscribe(callback: (event: Event) => void) {
     this.listeners.push(callback);
     return () => {
       this.listeners = this.listeners.filter(cb => cb !== callback);
     };
   }
 
-  emit(message: ConnectionMessage) {
-    this.listeners.forEach(callback => callback(message));
+  emit(event: Event) {
+    this.listeners.forEach(callback => callback(event));
   }
 }
 
-export const connectionEvents = new ConnectionEventEmitter();
+export const validatedEvents = new EventEmitter();
 
 interface ConnectionProviderProps {
   children: ReactNode;
@@ -50,6 +53,7 @@ interface ConnectionProviderProps {
 export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
   const [status, setStatus] = useState<ConnectionStatus>('offline');
   const [lastMessage, setLastMessage] = useState<ConnectionMessage | null>(null);
+  const [events, setEvents] = useState<Event[]>([]);
   const wsRef = useRef<WebSocket | null>(null);
   const eventSourceRef = useRef<EventSource | null>(null);
   const reconnectTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -81,7 +85,22 @@ export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
       timestamp: Date.now()
     };
     setLastMessage(message);
-    connectionEvents.emit(message);
+
+    // Validate and process event payload
+    const validation = validateEventPayload(data);
+    let processedEvent: Event;
+    
+    if (validation.isValid && validation.validatedPayload) {
+      processedEvent = createValidEvent(validation.validatedPayload);
+    } else {
+      processedEvent = createErrorEvent(validation.errors, data);
+    }
+
+    // Add event to the list (keep last 50 events)
+    setEvents(prevEvents => [processedEvent, ...prevEvents.slice(0, 49)]);
+    
+    // Emit the processed event
+    validatedEvents.emit(processedEvent);
   };
 
   const scheduleReconnect = () => {
@@ -198,7 +217,7 @@ export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
   }, [connectionUrl]);
 
   return (
-    <ConnectionContext.Provider value={{ status, lastMessage, connect, disconnect }}>
+    <ConnectionContext.Provider value={{ status, lastMessage, events, connect, disconnect }}>
       {children}
     </ConnectionContext.Provider>
   );

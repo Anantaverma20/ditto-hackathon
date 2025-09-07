@@ -5,6 +5,7 @@ import { TearBubble, ZzzBubble, BoomPopover, ConfettiBurst } from './animations/
 import { MediaOverlay } from './animations/MediaOverlay';
 import { useConnectionEvents } from '@/hooks/useConnectionEvents';
 import { useOfficeSettings } from '@/contexts/OfficeSettings';
+import { AvatarPopover } from './AvatarPopover';
 import { useEffect } from 'react';
 
 interface AnimatedAvatarProps {
@@ -112,61 +113,63 @@ export function AnimatedAvatar({ userId, name, initials, colorIndex, status = 'o
   const reducedMotionClass = getReducedMotionHighlight(currentAnimation);
 
   return (
-    <div className={cn("flex flex-col items-center group cursor-pointer relative", className)}>
-      {/* Media Overlays - only show if not muted */}
-      {!muteMemes && overlays.map((overlay) => (
-        <MediaOverlay
-          key={overlay.id}
-          overlay={overlay}
-          onDismiss={removeOverlay}
-        />
-      ))}
-      
-      {/* Animation Effects - only show if motion is not reduced */}
-      {!reduceMotion && (
-        <>
-          <TearBubble 
-            show={currentAnimation?.type === 'cry'} 
-            onComplete={completeAnimation}
+    <AvatarPopover userId={userId} displayName={name} status={status}>
+      <div className={cn("flex flex-col items-center group cursor-pointer relative", className)}>
+        {/* Media Overlays - only show if not muted */}
+        {!muteMemes && overlays.map((overlay) => (
+          <MediaOverlay
+            key={overlay.id}
+            overlay={overlay}
+            onDismiss={removeOverlay}
           />
-          <ZzzBubble 
-            show={currentAnimation?.type === 'sleep'} 
-            onComplete={completeAnimation}
-          />
-          <BoomPopover 
-            show={currentAnimation?.type === 'rage'} 
-            onComplete={completeAnimation}
-          />
-          <ConfettiBurst 
-            show={currentAnimation?.type === 'dance' || currentAnimation?.type === 'party'} 
-            onComplete={completeAnimation}
-          />
-        </>
-      )}
-      
-      {/* Avatar Container */}
-      <div className="relative">
-        <div className={cn(
-          "w-16 h-16 rounded-full flex items-center justify-center text-white font-semibold text-lg",
-          "shadow-avatar transition-all duration-300 group-hover:scale-105",
-          "group-hover:shadow-lg rounded-full",
-          getAvatarColor(colorIndex),
-          animationClass,
-          reducedMotionClass
-        )}>
-          {initials}
+        ))}
+        
+        {/* Animation Effects - only show if motion is not reduced */}
+        {!reduceMotion && (
+          <>
+            <TearBubble 
+              show={currentAnimation?.type === 'cry'} 
+              onComplete={completeAnimation}
+            />
+            <ZzzBubble 
+              show={currentAnimation?.type === 'sleep'} 
+              onComplete={completeAnimation}
+            />
+            <BoomPopover 
+              show={currentAnimation?.type === 'rage'} 
+              onComplete={completeAnimation}
+            />
+            <ConfettiBurst 
+              show={currentAnimation?.type === 'dance' || currentAnimation?.type === 'party'} 
+              onComplete={completeAnimation}
+            />
+          </>
+        )}
+        
+        {/* Avatar Container */}
+        <div className="relative">
+          <div className={cn(
+            "w-16 h-16 rounded-full flex items-center justify-center text-white font-semibold text-lg",
+            "shadow-avatar transition-all duration-300 group-hover:scale-105",
+            "group-hover:shadow-lg rounded-full",
+            getAvatarColor(colorIndex),
+            animationClass,
+            reducedMotionClass
+          )}>
+            {initials}
+          </div>
+          
+          {/* Status indicator */}
+          <div className={cn(
+            "absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-background",
+            getStatusColor(status)
+          )} />
         </div>
         
-        {/* Status indicator */}
-        <div className={cn(
-          "absolute -bottom-1 -right-1 w-5 h-5 rounded-full border-2 border-background",
-          getStatusColor(status)
-        )} />
+        <span className="mt-2 text-sm font-medium text-foreground text-center max-w-20 truncate group-hover:text-primary transition-colors">
+          {name}
+        </span>
       </div>
-      
-      <span className="mt-2 text-sm font-medium text-foreground text-center max-w-20 truncate group-hover:text-primary transition-colors">
-        {name}
-      </span>
-    </div>
+    </AvatarPopover>
   );
 }

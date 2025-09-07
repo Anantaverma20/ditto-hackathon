@@ -64,6 +64,16 @@ export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
   const reconnectAttempts = useRef(0);
   const maxReconnectAttempts = 5;
 
+  // Listen for office reset events
+  useEffect(() => {
+    const handleOfficeReset = () => {
+      setEvents([]);
+    };
+
+    window.addEventListener('office-reset', handleOfficeReset);
+    return () => window.removeEventListener('office-reset', handleOfficeReset);
+  }, []);
+
   const connectionUrl = import.meta.env.VITE_CONNECTION_URL || '';
   const connectionType = import.meta.env.VITE_CONNECTION_TYPE || 'websocket'; // 'websocket' or 'sse'
 
@@ -101,9 +111,17 @@ export const ConnectionProvider = ({ children }: ConnectionProviderProps) => {
       window.dispatchEvent(new CustomEvent('avatar-registry-update', {
         detail: {
           userId: validation.validatedPayload.userId,
-          displayName: validation.validatedPayload.displayName
+          displayName: validation.validatedPayload.displayName,
+          room: validation.validatedPayload.room
         }
       }));
+
+      // Notify office settings about new room
+      if (validation.validatedPayload.room) {
+        window.dispatchEvent(new CustomEvent('room-discovered', {
+          detail: { room: validation.validatedPayload.room }
+        }));
+      }
     } else {
       processedEvent = createErrorEvent(validation.errors, data);
     }

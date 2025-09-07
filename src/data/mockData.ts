@@ -18,6 +18,7 @@ export interface Event {
   mediaUrl?: string;
   type?: 'event' | 'error';
   errorMessage?: string;
+  room?: string;
 }
 
 export interface IncomingEventPayload {
@@ -27,6 +28,7 @@ export interface IncomingEventPayload {
   messageText: string;
   mediaUrl?: string;
   timestamp?: number;
+  room?: string;
 }
 
 export const mockUsers: User[] = [

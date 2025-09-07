@@ -44,6 +44,7 @@ export function validateEventPayload(payload: any): { isValid: boolean; errors: 
     action: payload.action.trim(),
     messageText: payload.messageText.trim(),
     mediaUrl: payload.mediaUrl?.trim(),
+    room: payload.room?.trim(),
     timestamp: payload.timestamp || Date.now()
   };
 
@@ -68,6 +69,7 @@ export function createValidEvent(payload: IncomingEventPayload): Event {
     relativeTime,
     timestamp: payload.timestamp!,
     mediaUrl: payload.mediaUrl,
+    room: payload.room,
     type: 'event'
   };
 }

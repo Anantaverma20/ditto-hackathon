@@ -8,11 +8,12 @@ export interface RegistryUser {
   status: 'online' | 'away' | 'busy' | 'offline';
   gridPosition: number;
   lastActivity: number;
+  room?: string;
 }
 
 interface AvatarRegistryContextType {
   users: RegistryUser[];
-  addOrUpdateUser: (userId: string, displayName: string) => RegistryUser;
+  addOrUpdateUser: (userId: string, displayName: string, room?: string) => RegistryUser;
   updateUserActivity: (userId: string) => void;
   getUserByPosition: (position: number) => RegistryUser | null;
   getTotalUsers: () => number;
@@ -94,7 +95,7 @@ export const AvatarRegistryProvider = ({ children }: AvatarRegistryProviderProps
     return preferredPosition;
   }, [occupiedPositions]);
 
-  const addOrUpdateUser = useCallback((userId: string, displayName: string): RegistryUser => {
+  const addOrUpdateUser = useCallback((userId: string, displayName: string, room?: string): RegistryUser => {
     let resultUser: RegistryUser;
     
     setUsers(prevUsers => {
@@ -107,7 +108,8 @@ export const AvatarRegistryProvider = ({ children }: AvatarRegistryProviderProps
           displayName,
           initials: displayName !== existingUser.displayName ? generateInitials(displayName) : existingUser.initials,
           lastActivity: Date.now(),
-          status: 'online' as const
+          status: 'online' as const,
+          room: room || existingUser.room
         };
         resultUser = updatedUser;
         
@@ -126,7 +128,8 @@ export const AvatarRegistryProvider = ({ children }: AvatarRegistryProviderProps
           colorIndex: generateColorIndex(userId),
           status: 'online',
           gridPosition,
-          lastActivity: Date.now()
+          lastActivity: Date.now(),
+          room
         };
 
         resultUser = newUser;
@@ -160,15 +163,22 @@ export const AvatarRegistryProvider = ({ children }: AvatarRegistryProviderProps
   // Listen for avatar registry updates from connection context
   useEffect(() => {
     const handleAvatarUpdate = (event: CustomEvent) => {
-      const { userId, displayName } = event.detail;
-      addOrUpdateUser(userId, displayName);
+      const { userId, displayName, room } = event.detail;
+      addOrUpdateUser(userId, displayName, room);
       updateUserActivity(userId);
     };
 
+    const handleOfficeReset = () => {
+      setUsers([]);
+      setOccupiedPositions(new Set());
+    };
+
     window.addEventListener('avatar-registry-update', handleAvatarUpdate as EventListener);
+    window.addEventListener('office-reset', handleOfficeReset);
     
     return () => {
       window.removeEventListener('avatar-registry-update', handleAvatarUpdate as EventListener);
+      window.removeEventListener('office-reset', handleOfficeReset);
     };
   }, [addOrUpdateUser, updateUserActivity]);
 

@@ -1,11 +1,15 @@
 import { OfficeCanvas } from '@/components/OfficeCanvas';
 import { EventLog } from '@/components/EventLog';
+import { OfficeControlBar } from '@/components/OfficeControlBar';
 
 const Index = () => {
   return (
-    <div className="flex min-h-screen bg-background">
-      <OfficeCanvas />
-      <EventLog />
+    <div className="min-h-screen bg-background">
+      <OfficeControlBar />
+      <div className="flex">
+        <OfficeCanvas />
+        <EventLog />
+      </div>
     </div>
   );
 };

@@ -2,25 +2,34 @@ import { AnimatedAvatar } from './AnimatedAvatar';
 import { mockUsers } from '@/data/mockData';
 import { useAvatarRegistry } from '@/contexts/AvatarRegistry';
 import { useConnection } from '@/contexts/ConnectionContext';
+import { useOfficeSettings } from '@/contexts/OfficeSettings';
 
 export function OfficeCanvas() {
   const { users, getTotalUsers } = useAvatarRegistry();
   const { status } = useConnection();
+  const { selectedRoom } = useOfficeSettings();
   
   // Use registry users if available, otherwise fall back to mock data
-  const displayUsers = users.length > 0 ? users : mockUsers;
-  const totalUsers = users.length > 0 ? getTotalUsers() : mockUsers.length;
+  const allUsers = users.length > 0 ? users : mockUsers;
+  
+  // Filter users by selected room (if room filtering is implemented)
+  const displayUsers = selectedRoom === 'all' 
+    ? allUsers 
+    : allUsers.filter(user => {
+        const userRoom = 'room' in user ? user.room : undefined;
+        return userRoom === selectedRoom;
+      });
+    
+  const totalUsers = displayUsers.length;
   const isLive = users.length > 0 && status === 'live';
 
   return (
-    <div className="flex-1 bg-gradient-canvas min-h-screen p-8">
+    <div className="flex-1 bg-gradient-canvas p-8" style={{ minHeight: 'calc(100vh - 60px)' }}>
       <div className="max-w-7xl mx-auto">
         <div className="mb-8">
-          <h1 className="text-4xl font-bold text-foreground mb-2">
-            Office Chaos
-          </h1>
           <p className="text-muted-foreground text-lg">
             {isLive ? 'Live office activity dashboard' : 'Office activity dashboard'} • {totalUsers} people {isLive ? 'active' : 'online'}
+            {selectedRoom !== 'all' && ` • Room: ${selectedRoom}`}
           </p>
         </div>
         
@@ -29,7 +38,7 @@ export function OfficeCanvas() {
             <AnimatedAvatar
               key={user.id}
               userId={user.id}
-              name={users.length > 0 ? user.displayName : user.name}
+              name={'displayName' in user ? user.displayName : user.name}
               initials={user.initials}
               colorIndex={user.colorIndex}
               status={user.status}
